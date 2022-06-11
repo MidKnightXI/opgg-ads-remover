@@ -1,0 +1,28 @@
+{
+  "name": "oppgg-remover",
+  "version": "1.0.0",
+  "description": "ad remover for the electron app of opgg",
+  "main": "index.js",
+  "repository": "git@github.com:MidKnightXI/opgg-ads-remover.git",
+  "author": "MidKnightXI",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "dependencies": {
+    "asar": "^3.1.0",
+    "child_process": "^1.0.2",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.6.2"
+  }
+}
