@@ -16,8 +16,8 @@ You just have to clone the repository with
 
 open the directory in a shell terminal and run
 
-```yarn install && yarn run build:<your-platform>```
+```yarn install && yarn run build:<-your-platform->```
 
-> replace the <your-platform> by `win`, `win-arm` or `darwin`
+> replace the <-your-platform-> by `win`, `win-arm` or `darwin`
 
 Then double click on the .exe and that's it
