@@ -1,8 +1,8 @@
-import { extractAll, createPackageWithOptions } from "asar";
-import { readdirSync, readFileSync, writeFileSync, existsSync } from "fs";
-import { sync } from "rimraf";
-import { dirname } from "path";
-import { spawn } from "child_process";
+const { extractAll, createPackageWithOptions } = require("asar");
+const { readdirSync, readFileSync, writeFileSync, existsSync } = require("fs");
+const { sync } = require("rimraf");
+const { dirname } = require("path");
+const { spawn } = require("child_process");
 
 function replaceAdFileContent(fileName, assetDir) {
   let content = readFileSync(`${assetDir}/${fileName}`).toString();
