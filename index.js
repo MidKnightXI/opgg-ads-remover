@@ -1,12 +1,11 @@
 const { extractAll, createPackageWithOptions } = require("asar");
 const { readdirSync, readFileSync, writeFileSync, existsSync } = require("fs");
 const { sync } = require("rimraf");
-const { dirname } = require("path");
+const { dirname, normalize } = require("path");
 const { spawn } = require("child_process");
-const path = require("path");
 
 function replaceAdFileContent(fileName, assetDir) {
-  const contentPath = path.normalize(`${assetDir}/${fileName}`);
+  const contentPath = normalize(`${assetDir}/${fileName}`);
   let content = readFileSync(contentPath).toString();
 
   content = content.replaceAll(
@@ -40,7 +39,7 @@ async function rebuildAddDir(asarFilePath) {
   console.log("Unpacking OPGG asar file");
   extractAll(asarFilePath, "op-gg-unpacked");
 
-  const assetDir = path.normalize("op-gg-unpacked/assets/react");
+  const assetDir = normalize("op-gg-unpacked/assets/react");
   const assetFiles = readdirSync(assetDir);
 
   for (let fileName of assetFiles) {
@@ -72,10 +71,10 @@ function main() {
    * Use path.normalize to use ensure the right slash is used based on the
    * operating system, forward slash or backward slash.
    */
-  const darwinPath = path.normalize(
+  const darwinPath = normalize(
     "/Applications/OP.GG.app/Contents/Resources/app.asar"
   );
-  const winPath = path.normalize(
+  const winPath = normalize(
     `${dirname(process.env.APPDATA)}/Local/Programs/OP.GG/resources/app.asar`
   );
   const asarFilePath = process.platform === "darwin" ? darwinPath : winPath;
