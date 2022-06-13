@@ -1,11 +1,11 @@
 import { extractAll, createPackageWithOptions } from "asar";
 import { readdirSync, readFileSync, writeFileSync, existsSync } from "fs";
 import { sync } from "rimraf";
-import { dirname } from "path";
+import { dirname, normalize } from "path";
 import { spawn } from "child_process";
 
-function replaceAdFileContent(fileName, assetDir) {
-  let content = readFileSync(`${assetDir}/${fileName}`).toString();
+function replaceAdFileContent(path) {
+  let content = readFileSync(path).toString();
 
   content = content.replaceAll(
     "https://dtapp-player.op.gg/adsense.txt",
@@ -31,11 +31,11 @@ function replaceAdFileContent(fileName, assetDir) {
     /exports\.nitropayAds=\w;/gm,
     "exports.nitropayAds=[];"
   );
-  writeFileSync(`${assetDir}/${fileName}`, content);
+  writeFileSync(path, content);
 }
 
 async function rebuildAddDir(asarFilePath) {
-  const assetDir = "op-gg-unpacked/assets/react";
+  const assetDir = normalize("op-gg-unpacked/assets/react");
   const assetFiles = readdirSync(assetDir);
 
   console.log("Unpacking OPGG asar file");
@@ -44,7 +44,7 @@ async function rebuildAddDir(asarFilePath) {
   for (let fileName of assetFiles) {
     if (fileName.endsWith(".js")) {
       console.log(`Patching: ${fileName}`);
-      replaceAdFileContent(fileName, assetDir);
+      replaceAdFileContent(normalize(`${assetDir}/${fileName}`));
     }
   }
 
@@ -68,10 +68,12 @@ function killOpgg() {
 function main() {
   const asarFilePath =
     process.platform === "darwin"
-      ? "/Applications/OP.GG.app/Contents/Resources/app.asar"
-      : `${dirname(
-          process.env.APPDATA
-        )}/Local/Programs/OP.GG/resources/app.asar`;
+      ? normalize("/Applications/OP.GG.app/Contents/Resources/app.asar")
+      : normalize(
+          `${dirname(
+            process.env.APPDATA
+          )}/Local/Programs/OP.GG/resources/app.asar`
+        );
 
   if (!existsSync(asarFilePath)) {
     console.log(`Cannot find asar file at ${asarFilePath}`);
