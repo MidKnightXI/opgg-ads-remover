@@ -35,11 +35,11 @@ function replaceAdFileContent(path) {
 }
 
 async function rebuildAddDir(asarFilePath) {
-  const assetDir = normalize("op-gg-unpacked/assets/react");
-  const assetFiles = readdirSync(assetDir);
-
   console.log("Unpacking OPGG asar file");
   extractAll(asarFilePath, "op-gg-unpacked");
+
+  const assetDir = normalize("op-gg-unpacked/assets/react");
+  const assetFiles = readdirSync(assetDir);
 
   for (let fileName of assetFiles) {
     if (fileName.endsWith(".js")) {
