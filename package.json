@@ -12,10 +12,11 @@
     "format:write": "prettier --write .",
     "lint:check": "eslint .",
     "lint:fix": "eslint --fix .",
-    "build": "pkg -o opgg-ads-remover -t node16-win-x64,node16-darwin-x64 index.js",
-    "build:win": "pkg -o opgg-ads-remover -t node16-win-x64 index.js",
-    "build:win-arm": "pkg -o opgg-ads-remover -t node16-win-arm64 index.js",
-    "build:darwin": "pkg -o opgg-ads-remover -t node16-darwin-x64 index.js"
+    "bundle": "rollup --config",
+    "build": "rollup -c && pkg -o opgg-ads-remover -t node16-win-x64,node16-darwin-x64 bundle.js",
+    "build:win": "rollup -c && pkg -o opgg-ads-remover -t node16-win-x64 bundle.js",
+    "build:win-arm": "rollup -c && pkg -o opgg-ads-remover -t node16-win-arm64 bundle.js",
+    "build:darwin": "rollup -c && pkg -o opgg-ads-remover -t node16-darwin-x64 bundle.js"
   },
   "dependencies": {
     "asar": "^3.1.0",
@@ -28,6 +29,7 @@
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "pkg": "^5.7.0",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "rollup": "^2.75.6"
   }
 }
