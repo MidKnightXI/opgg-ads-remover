@@ -12,7 +12,7 @@ Then you just have to doucle click on the .exe and that's it.
 ### With git and yarn
 You just have to clone the repository with
 
-``` git clone clone https://github.com/MidKnightXI/opgg-ads-remover.git```
+``` git clone https://github.com/MidKnightXI/opgg-ads-remover.git```
 
 open the directory in a shell terminal and run
 
