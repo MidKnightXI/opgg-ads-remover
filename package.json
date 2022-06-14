@@ -14,9 +14,9 @@
     "lint:fix": "eslint --fix .",
     "bundle": "rollup --config",
     "build": "rollup -c && pkg -o opgg-ads-remover -t node16-win-x64,node16-darwin-x64 bundle.js",
-    "build:win": "rollup -c && pkg -o opgg-ads-remover -t node16-win-x64 bundle.js",
-    "build:win-arm": "rollup -c && pkg -o opgg-ads-remover -t node16-win-arm64 bundle.js",
-    "build:darwin": "rollup -c && pkg -o opgg-ads-remover -t node16-darwin-x64 bundle.js"
+    "build:win": "rollup -c && pkg -o opgg-ads-remover-win -t node16-win-x64 bundle.js",
+    "build:win-arm": "rollup -c && pkg -o opgg-ads-remover-win-arm -t node16-win-arm64 bundle.js",
+    "build:darwin": "rollup -c && pkg -o opgg-ads-remover-darwin -t node16-darwin-x64 bundle.js"
   },
   "dependencies": {
     "asar": "^3.1.0",

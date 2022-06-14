@@ -2,5 +2,4 @@ node_modules
 yarn.lock
 package-lock.json
 bundle.js
-opgg-ads-remover
-opgg-ads-remover.*
+opgg-ads-remover*
