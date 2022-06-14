@@ -23,3 +23,13 @@ open the directory in a shell terminal and run
 > replace the <-your-platform-> by `win`, `win-arm` or `darwin`
 
 Then double click on the .exe and that's it
+
+# Contributing
+
+<!-- Do not remove or modify this section -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/MidKnightXI"><img src="https://avatars.githubusercontent.com/u/35759490?v=4" width="100px;" alt=""/><br /><sub><b> MidKnightXI </b></sub></a><br /><a href="https://github.com/MidKnightXI/opgg-ads-remover/commits?author=MidKnightXI" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/MissUwuieTime"><img src="https://avatars.githubusercontent.com/u/87099578?v=4" width="100px;" alt=""/><br /><sub><b> MissUwuieTime </b></sub></a><br /><a href="https://github.com/MidKnightXI/opgg-ads-remover/commits?author=MissUwuieTime" title="Code">💻</a></td>
+  </tr>
+</table>
