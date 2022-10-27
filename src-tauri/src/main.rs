@@ -7,8 +7,11 @@ mod patcher;
 
 #[tauri::command]
 fn patch() -> i32 {
-    patcher::remove_ads();
-    return 1
+    if patcher::remove_ads()
+    {
+        return 1;
+    }
+    return 0;
 }
 
 fn main() {

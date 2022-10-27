@@ -1,6 +1,19 @@
 fn kill_opgg()
 {
-
+    if std::env::consts::OS == "macos"
+    {
+        std::process::Command::new("killall")
+        .args(["-9", "OP.GG"])
+        .spawn()
+        .expect("kill_opgg: OPGG not killed or already killed");
+    }
+    else if std::env::consts::OS == "windows"
+    {
+        std::process::Command::new("taskkill")
+        .args(["/im", "OP.GG.exe", "/F"])
+        .spawn()
+        .expect("kill_opgg: OPGG not killed or already killed");
+    }
 }
 
 fn asar_path() -> String
@@ -28,5 +41,11 @@ fn asar_path() -> String
 pub fn remove_ads() -> bool
 {
     let asar_file_path: String = asar_path();
-    return true;
+
+    if std::path::Path::new(&asar_file_path).exists()
+    {
+        kill_opgg();
+        return true;
+    }
+    return false;
 }
