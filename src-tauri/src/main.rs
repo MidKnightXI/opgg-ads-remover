@@ -3,9 +3,12 @@
     windows_subsystem = "windows"
 )]
 
+mod patcher;
+
 #[tauri::command]
 fn patch() -> i32 {
-    return 1;
+    patcher::remove_ads();
+    return 1
 }
 
 fn main() {
