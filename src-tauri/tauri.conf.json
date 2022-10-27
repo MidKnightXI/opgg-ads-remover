@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "opgg-ads-remover",
-    "version": "0.0.0"
+    "version": "2.0.0-b"
   },
   "tauri": {
     "allowlist": {
@@ -56,10 +56,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
-        "resizable": true,
+        "height": 500,
+        "resizable": false,
         "title": "opgg-ads-remover",
-        "width": 800
+        "width": 500
       }
     ]
   }
