@@ -4,6 +4,7 @@
 )]
 
 mod patcher;
+mod asar;
 
 #[tauri::command]
 fn patch() -> i32 {
