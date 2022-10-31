@@ -19,7 +19,7 @@
     "build:darwin": "rollup -c && pkg -o opgg-ads-remover-darwin -t node16-darwin-x64 bundle.js"
   },
   "dependencies": {
-    "asar": "^3.1.0",
+    "asar": "3.1.0",
     "child_process": "^1.0.2",
     "fs": "^0.0.1-security",
     "path": "^0.12.7",
