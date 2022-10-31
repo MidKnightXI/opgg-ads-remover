@@ -10,7 +10,7 @@ Simply [click here](https://github.com/MidKnightXI/opgg-ads-remover/releases) an
 
 Then you just have to doucle click on the .exe and that's it.
 
-### With git and yarn
+### Build it yourself
 
 You just have to clone the repository with
 
@@ -20,9 +20,16 @@ open the directory in a shell terminal and run
 
 `yarn install && yarn run build:<-your-platform->`
 
-> replace the <-your-platform-> by `win`, `win-arm` or `darwin`
+> replace the <-your-platform-> by `win`, `win-arm` or `darwin`(for macos)
 
-Then double click on the .exe and that's it
+Then double click on the binary and that's it
+
+### For macos users
+
+- uninstall opgg
+- install opgg from the .dmg
+- execute the script via `./opgg-ads-remover-macos` or double click on it
+- launch opgg
 
 # Contributing
 
