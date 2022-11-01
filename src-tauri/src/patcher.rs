@@ -1,22 +1,33 @@
+
+// fn unpack_asar(path: &str)
+// {
+
+// }
+
 fn kill_opgg()
 {
+    use std::process::Command;
+
+    let mut process: Command;
+
     if std::env::consts::OS == "macos"
     {
-        std::process::Command::new("killall")
-        .args(["-9", "OP.GG"])
-        .spawn()
-        .expect("kill_opgg: OPGG not killed or already killed");
+        process = Command::new("killall");
+        process.args(&["-9", "OP.GG"]);
     }
     else if std::env::consts::OS == "windows"
     {
-        std::process::Command::new("taskkill")
-        .args(["/im", "OP.GG.exe", "/F"])
-        .spawn()
-        .expect("kill_opgg: OPGG not killed or already killed");
-    }
+        // let CREATE_NO_WINDOW = 0x08000000;
+
+        process = Command::new("taskkill");
+        process.args(["/im", "OP.GG.exe", "/F"]);
+
+    } else { return; }
+
+    process.spawn().expect("kill_opgg");
 }
 
-fn asar_path() -> String
+fn format_asar_path() -> Result<std::path::PathBuf, String>
 {
     let path: String;
 
@@ -26,26 +37,46 @@ fn asar_path() -> String
     }
     else if std::env::consts::OS == "windows"
     {
+        let appdata: String;
+
         match std::env::var("APP_DATA") {
-            Ok(k) => path = format!("{}/Local/Programs/OP.GG/resources/app.asar", k),
-            Err(e) => panic!("$APP_DATA is not set ({})", e)
-        }
+            Ok(val) => appdata = val,
+            Err(e) => return Err(format!("format_asar_path: {e}"))
+        };
+
+        path = format!(
+            "{}/Local/Programs/OP.GG/resources/app.asar",
+            appdata
+        );
     }
     else
     {
-        panic!("Your OS isn't compatible with this script");
+        return Err("format_asar_path: Platform not compatible".to_string());
     }
-    return path;
+
+    match std::fs::canonicalize(path) {
+        Ok(val) => return Ok(val),
+        Err(e) => return Err(format!("format_asar_path: {e}"))
+    }
 }
 
-pub fn remove_ads() -> bool
+pub fn remove_ads() -> Result<bool, String>
 {
-    let asar_file_path: String = asar_path();
+    let platform_path: std::path::PathBuf;
 
-    if std::path::Path::new(&asar_file_path).exists()
+    match format_asar_path() {
+        Ok(val) => platform_path = val,
+        Err(e) => return Err(e)
+    };
+
+    if !platform_path.exists()
     {
-        kill_opgg();
-        return true;
+        return Err(
+            "remove_ads: OP.GG not found, make sure the app is installed"
+            .to_string()
+        );
     }
-    return false;
+    kill_opgg();
+    // unpack_asar(platform_path.to_str().unwrap());
+    return Ok(true);
 }

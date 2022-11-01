@@ -7,12 +7,11 @@ mod patcher;
 mod asar;
 
 #[tauri::command]
-fn patch() -> i32 {
-    if patcher::remove_ads()
-    {
-        return 1;
+fn patch() -> String {
+    match patcher::remove_ads() {
+        Ok(_v) => return "Patched Successfully".to_string(),
+        Err(e) => return e
     }
-    return 0;
 }
 
 fn main() {

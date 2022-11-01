@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "opgg-ads-remover",
+    "productName": "opgg-patcher",
     "version": "2.0.0-b"
   },
   "tauri": {
@@ -29,17 +29,17 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
-      "longDescription": "",
+      "identifier": "com.opgg-patcher.midknight",
+      "longDescription": "Ad remover for the electron based app OP.GG",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
         "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
+        "providerShortName": "Midknight",
+        "signingIdentity": "MidKnightXI"
       },
       "resources": [],
-      "shortDescription": "",
+      "shortDescription": "Patcher for OP.GG",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
@@ -58,7 +58,7 @@
         "fullscreen": false,
         "height": 500,
         "resizable": false,
-        "title": "opgg-ads-remover",
+        "title": "opgg-patcher",
         "width": 500
       }
     ]

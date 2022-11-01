@@ -9,11 +9,7 @@ function App() {
   const [status, setStatus] = createSignal("");
 
   async function patch() {
-    const res = await invoke("patch") === 1 ?
-    "Patched Successfully"
-    :
-    "An Error Occured During The Patch";
-
+    const res = await invoke("patch")
     setStatus(res);
   }
 
