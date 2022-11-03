@@ -1,9 +1,19 @@
+/// Unpack the asar archive located at `path`
+///
+/// # Arguments
+///
+/// * `path` - &str containing the path where the archive is located
+///
+/// # Example
+/// ```
+/// unpack_asar("/path/to/archive.asar");
+/// ```
+fn unpack_asar(path: &str)
+{
 
-// fn unpack_asar(path: &str)
-// {
+}
 
-// }
-
+/// Spawn a process to kill OP.GG process
 fn kill_opgg()
 {
     use std::process::Command;
@@ -27,6 +37,12 @@ fn kill_opgg()
     process.spawn().expect("kill_opgg");
 }
 
+/// Returns the path to OP.GG based on which platform the user is using
+///
+/// ## Returns
+///
+/// * Success - returns the canonicalize version of the path to OP.GG app directory
+/// * Failure - returns a String containing the error
 fn format_asar_path() -> Result<std::path::PathBuf, String>
 {
     let path: String;
@@ -60,6 +76,12 @@ fn format_asar_path() -> Result<std::path::PathBuf, String>
     }
 }
 
+/// Main function for the patcher mod
+///
+/// ## Returns
+///
+/// * Succes - returns `true`
+/// * Failure - returns a String containing the error
 pub fn remove_ads() -> Result<bool, String>
 {
     let platform_path: std::path::PathBuf;
