@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "opgg-patcher",
+    "productName": "OPGG Patcher",
     "version": "2.0.0-b"
   },
   "tauri": {
@@ -36,7 +36,7 @@
         "exceptionDomain": "",
         "frameworks": [],
         "providerShortName": "Midknight",
-        "signingIdentity": "MidKnightXI"
+        "signingIdentity": null
       },
       "resources": [],
       "shortDescription": "Patcher for OP.GG",
@@ -44,7 +44,10 @@
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+        "timestampUrl": "",
+        "webviewInstallMode": {
+          "type": "downloadBootstrapper"
+        }
       }
     },
     "security": {

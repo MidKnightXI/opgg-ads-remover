@@ -1,3 +1,9 @@
 .logo.opgg:hover {
   filter: drop-shadow(0 0 2em #ff0000);
 }
+
+#copyright {
+  font-size: 9px;
+  position: absolute;
+  bottom: 0;
+}
