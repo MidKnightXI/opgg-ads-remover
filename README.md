@@ -27,6 +27,7 @@ Then you just have to unzip the file and doucle click on the executable.
 - Install OP.GG from the .dmg
 - Try to open the app
 > It'll block you from opening it, go to next step.
+
 > We're just tricking macOS to not make us delete the app after modifying it.
 - Execute the script via `./opgg-ads-remover-macos`
 > Or double click on the binary `opgg-ads-remover-macos`
