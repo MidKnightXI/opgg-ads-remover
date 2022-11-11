@@ -23,20 +23,6 @@ Then you just have to unzip the file and doucle click on the executable.
 
 ### For macOS users
 
-<br/>
-
-Open the directory in a shell terminal and run
-
-`yarn install && yarn run build:<-your-platform->`
-
-> replace the <-your-platform-> by `win`, `win-arm` or `darwin`(for macos)
-
-<br/>
-
-Then double click on the binary and that's it
-
-### For macOS users
-
 - Uninstall OP.GG
 - Install OP.GG from the .dmg
 - Try to open the app
