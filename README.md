@@ -4,7 +4,7 @@ Patcher removing ads from the desktop application [OP.GG](https://op.gg/desktop/
 
 ## Installation
 
-### The easy way
+### Easy way
 
 Click on your platform:
 
@@ -16,9 +16,12 @@ Then you just have to unzip the file and doucle click on the executable.
 
 ### Build it yourself
 
-You just have to clone the repository with
+* Clone the repository: `git clone https://github.com/MidKnightXI/opgg-ads-remover.git`
+* Open the directory in a shell terminal and run: `yarn install && yarn run build:<-your-platform->`
+> Replace the <-your-platform-> by `win`, `win-arm` or `darwin`(for macos)
+* Double click on the executable
 
-` git clone https://github.com/MidKnightXI/opgg-ads-remover.git`
+### For macOS users
 
 <br/>
 
