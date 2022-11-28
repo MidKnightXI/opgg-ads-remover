@@ -30,7 +30,7 @@ fn kill_opgg()
         // let CREATE_NO_WINDOW = 0x08000000;
 
         process = Command::new("taskkill");
-        process.args(["/im", "OP.GG.exe", "/F"]);
+        process.args(&["/im", "OP.GG.exe", "/F"]);
 
     } else { return; }
 
