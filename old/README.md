@@ -4,37 +4,33 @@ Patcher removing ads from the desktop application [OP.GG](https://op.gg/desktop/
 
 ## Installation
 
-### The easy way
+### Easy way
 
-Simply [click here](https://github.com/MidKnightXI/opgg-ads-remover/releases) and choose your platform
+Click on your platform:
 
-Then you just have to doucle click on the .exe and that's it.
+* [Windows](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/v1.2/opgg-ads-remover-win.exe.zip)
+* [Windows ARM](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/v1.2/opgg-ads-remover-win-arm.exe.zip)
+* [macOS](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/v1.2/opgg-ads-remover-macos.zip)
+
+Then you just have to unzip the file and doucle click on the executable.
 
 ### Build it yourself
 
-You just have to clone the repository with
+* Clone the repository: `git clone https://github.com/MidKnightXI/opgg-ads-remover.git`
+* Open the directory in a shell terminal and run: `yarn install && yarn run build:<-your-platform->`
+> Replace the <-your-platform-> by `win`, `win-arm` or `darwin`(for macos)
+* Double click on the executable
 
-` git clone https://github.com/MidKnightXI/opgg-ads-remover.git`
-
-<br/>
-
-Open the directory in a shell terminal and run
-
-`yarn install && yarn run build:<-your-platform->`
-
-> replace the <-your-platform-> by `win`, `win-arm` or `darwin`(for macos)
-
-<br/>
-
-Then double click on the binary and that's it
-
-### For macos users
+### For macOS users
 
 - Uninstall OP.GG
 - Install OP.GG from the .dmg
-> Don't launch the app afterward or the script will fail
-- Execute the script via `./opgg-ads-remover-macos` or double click on it
-- Launch OP.GG application
+- Try to open the app
+> It'll block you from opening it, go to next step.
+
+> We're just tricking macOS to not make us delete the app after modifying it.
+- Double click on the binary `opgg-ads-remover-macos`
+- Open the OP.GG application from Finder with ^ + *click*
 
 # Contributing
 
