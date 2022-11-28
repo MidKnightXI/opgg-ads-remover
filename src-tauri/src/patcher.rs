@@ -8,9 +8,9 @@
 /// ```
 /// unpack_asar("/path/to/archive.asar");
 /// ```
-fn unpack_asar(path: &str)
+fn unpack_asar(_path: &str) -> bool
 {
-
+    return false
 }
 
 /// Spawn a process to kill OP.GG process
@@ -67,7 +67,7 @@ fn format_asar_path() -> Result<std::path::PathBuf, String>
     }
     else
     {
-        return Err("format_asar_path: Platform not compatible".to_string());
+        return Err("format_asar_path: Platform not compatible.".to_string());
     }
 
     match std::fs::canonicalize(path) {
@@ -80,25 +80,31 @@ fn format_asar_path() -> Result<std::path::PathBuf, String>
 ///
 /// ## Returns
 ///
-/// * Succes - returns `true`
+/// * Success - returns `true`
 /// * Failure - returns a String containing the error
 pub fn remove_ads() -> Result<bool, String>
 {
-    let platform_path: std::path::PathBuf;
+    let path: std::path::PathBuf;
 
     match format_asar_path() {
-        Ok(val) => platform_path = val,
+        Ok(val) => path = val,
         Err(e) => return Err(e)
     };
 
-    if !platform_path.exists()
+    if !path.exists()
     {
         return Err(
-            "remove_ads: OP.GG not found, make sure the app is installed"
+            "remove_ads: OP.GG not found, make sure the app is installed."
             .to_string()
         );
     }
     kill_opgg();
-    // unpack_asar(platform_path.to_str().unwrap());
+    if !unpack_asar(path.to_str().unwrap())
+    {
+        return Err(
+            "unpack_asar: cannot unpack asar archive."
+            .to_string()
+        );
+    }
     return Ok(true);
 }
