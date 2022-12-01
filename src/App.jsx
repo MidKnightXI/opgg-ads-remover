@@ -24,7 +24,9 @@ function App() {
         Patch
       </button>
       <p>{status}</p>
-      <p id="copyright">{`2022 - ${new Date().getFullYear()} OPGG Patcher - All Rights Reserved.`}</p>
+      <p id="copyright">
+        {`2022 - ${new Date().getFullYear()} OPGG Patcher - All Rights Reserved.`}
+      </p>
     </div>
   );
 }
