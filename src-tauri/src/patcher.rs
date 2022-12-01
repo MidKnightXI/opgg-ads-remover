@@ -20,7 +20,7 @@ fn unpack_asar(path: &str) -> bool
         Err(e) => panic!("{}", e),
     };
 
-    // Skip the 4 first bytes 32-bit unsigned integer
+    // Skip the 4 first bytes of 32-bit unsigned integer
     file.seek(SeekFrom::Start(4))
         .expect("unpack_asar: cannot go to offset 4.");
 
