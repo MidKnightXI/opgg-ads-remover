@@ -8,12 +8,15 @@
 /// ```
 /// unpack_asar("/path/to/archive.asar");
 /// ```
-fn unpack_asar(path: &str) -> bool
+fn extract_all(path: &str, _dest: &str) -> bool
 {
     use std::io::prelude::*;
     use std::io::SeekFrom;
 
-    let mut file;
+    let mut file: std::fs::File;
+    let mut buf: Vec<u8> = vec![0;4];
+    let mut header_size: i32;
+    let h_string: String;
 
     match std::fs::File::open(&path) {
         Ok(f) => file = f,
@@ -23,6 +26,23 @@ fn unpack_asar(path: &str) -> bool
     // Skip the 4 first bytes of 32-bit unsigned integer
     file.seek(SeekFrom::Start(4))
         .expect("unpack_asar: cannot go to offset 4.");
+
+    // Reading header size
+    file.read(&mut buf).expect("unpack_asar: cannot read header size.");
+    header_size = i32::from_ne_bytes(buf.try_into().unwrap());
+    if header_size < 1
+    {
+        eprintln!("unpack_asar: header_size is < 1 => index out of range.");
+        return false;
+    }
+    header_size -= 8;
+
+    // Get the header content
+    file.seek(SeekFrom::Current(8))
+        .expect("unpack_asar: cannot read further than header.");
+    buf = vec![0; header_size as usize];
+    file.read(&mut buf).expect("unpack_asar: cannot read header.");
+    h_string = String::from_utf8(buf).expect("unpack_asar: cannot convert to utf8");
 
     return true
 }
@@ -109,7 +129,7 @@ pub fn remove_ads() -> Result<bool, String>
         return Err("remove_ads: OP.GG not found, make sure the app is installed.".to_string());
     }
     kill_opgg();
-    if !unpack_asar(path.to_str().unwrap())
+    if !extract_all(path.to_str().unwrap(), "./")
     {
         return Err("unpack_asar: cannot unpack asar archive.".to_string());
     }
