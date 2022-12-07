@@ -31,7 +31,7 @@ fn extract_all(path: &str, _dest: &str) -> bool
         .expect("unpack_asar: cannot go to offset 4.");
 
     // Reading header size
-    file.read(&mut buf).expect("unpack_asar: cannot read header size.");
+    file.read_exact(&mut buf).expect("unpack_asar: cannot read header size.");
     header_size = i32::from_ne_bytes(buf.try_into().unwrap());
     if header_size < 1
     {
@@ -44,7 +44,7 @@ fn extract_all(path: &str, _dest: &str) -> bool
     file.seek(SeekFrom::Current(8))
         .expect("unpack_asar: cannot read further than header.");
     buf = vec![0; header_size as usize];
-    file.read(&mut buf).expect("unpack_asar: cannot read header.");
+    file.read_exact(&mut buf).expect("unpack_asar: cannot read header.");
     h_string = String::from_utf8(buf).expect("unpack_asar: cannot convert to utf8");
     let header: serde_json::Value = serde_json::from_str(h_string.as_str()).unwrap();
 
