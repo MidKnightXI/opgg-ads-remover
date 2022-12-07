@@ -1,4 +1,4 @@
-# opgg-ads-remover
+# opgg-patcher
 
 Patcher removing ads from the desktop application [OP.GG](https://op.gg/desktop/?utm_source=opgg&utm_medium=button&utm_campaign=global).
 
@@ -8,9 +8,9 @@ Patcher removing ads from the desktop application [OP.GG](https://op.gg/desktop/
 
 Click on your platform:
 
-* [Windows](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/v1.2/opgg-ads-remover-win.exe.zip)
-* [Windows ARM](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/v1.2/opgg-ads-remover-win-arm.exe.zip)
-* [macOS](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/v1.2/opgg-ads-remover-macos.zip)
+* [Windows](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/v1.3/opgg-patcher-win.exe.zip)
+* [Windows ARM](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/v1.3/opgg-patcher-win-arm.exe.zip)
+* [macOS](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/v1.3/opgg-patcher-macos.zip)
 
 Then you just have to unzip the file and doucle click on the executable.
 
