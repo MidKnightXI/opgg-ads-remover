@@ -1,3 +1,5 @@
+
+
 /// Unpack the asar archive located at `path`
 ///
 /// # Arguments
@@ -13,6 +15,7 @@ fn extract_all(path: &str, _dest: &str) -> bool
     use std::io::prelude::*;
     use std::io::SeekFrom;
 
+    // Maybe consider using bufreader later
     let mut file: std::fs::File;
     let mut buf: Vec<u8> = vec![0;4];
     let mut header_size: i32;
@@ -35,7 +38,7 @@ fn extract_all(path: &str, _dest: &str) -> bool
         eprintln!("unpack_asar: header_size is < 1 => index out of range.");
         return false;
     }
-    header_size -= 8;
+    header_size -= 10;
 
     // Get the header content
     file.seek(SeekFrom::Current(8))
@@ -43,6 +46,7 @@ fn extract_all(path: &str, _dest: &str) -> bool
     buf = vec![0; header_size as usize];
     file.read(&mut buf).expect("unpack_asar: cannot read header.");
     h_string = String::from_utf8(buf).expect("unpack_asar: cannot convert to utf8");
+    let header: serde_json::Value = serde_json::from_str(h_string.as_str()).unwrap();
 
     return true
 }
