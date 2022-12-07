@@ -29,7 +29,7 @@ Then you just have to unzip the file and doucle click on the executable.
 > It'll block you from opening it, go to next step.
 
 > We're just tricking macOS to not make us delete the app after modifying it.
-- Double click on the binary `opgg-ads-remover-macos`
+- Double click on the binary `opgg-patcher-macos`
 - Open the OP.GG application from Finder with ^ + *click*
 
 # Contributing
