@@ -1,15 +1,20 @@
-import { extractAll, createPackageWithOptions } from "asar";
-import { readdirSync, readFileSync, writeFileSync, existsSync } from "fs";
-import { sync } from "rimraf";
+import { extractAll, createPackageWithOptions } from "@electron/asar";
+import { readdirSync, readFileSync, writeFile, existsSync } from "fs";
+import rimraf from "rimraf";
 import { dirname, normalize } from "path";
 import { spawn } from "child_process";
+import { exit } from "process";
 
-function replaceAdFileContent(path) {
+function patchFile(path) {
   let content = readFileSync(path).toString();
+
+  const adsense_patch = "https://gist.githubusercontent.com/MidKnightXI/7ecf3cdd0a5804466cb790855e2524ae/raw/9b88cf64f3bb955edfff27bdfba72f5181d8748b/remover.txt";
+  const AMERICA = '["US","CA"].includes';
+  const EU = '["AD","AL","AT","AX","BA","BE","BG","BY","CH","CY","CZ","DE","DK","EE","ES","FI","FO","FR","GB","GG","GI","GR","HR","HU","IE","IM","IS","IT","JE","LI","LT","LU","LV","MC","MD","ME","MK","MT","NL","NO","PL","PT","RO","RS","RU","SE","SI","SJ","SK","SM","UA","VA","XK"].includes';
 
   content = content.replaceAll(
     "https://dtapp-player.op.gg/adsense.txt",
-    "https://gist.githubusercontent.com/MidKnightXI/7ecf3cdd0a5804466cb790855e2524ae/raw/9b88cf64f3bb955edfff27bdfba72f5181d8748b/remover.txt"
+    adsense_patch
   );
   content = content.replace(
     /exports\.countryHasAds=\w;/gm,
@@ -31,10 +36,20 @@ function replaceAdFileContent(path) {
     /exports\.nitropayAds=\w;/gm,
     "exports.nitropayAds=[];"
   );
-  writeFileSync(path, content);
+
+  content = content.replaceAll(
+    "google-analytics.com/mp/collect",
+    "gist.githubusercontent.com"
+  );
+
+  content = content.replaceAll(AMERICA, "[].includes");
+  content = content.replaceAll(EU, "[].includes");
+
+  writeFile(path, content, () => console.log(`PatchFile: rewriting ${path}`));
+  return;
 }
 
-async function rebuildAddDir(asarFilePath) {
+async function scanDir(asarFilePath) {
   console.log("Unpacking OPGG asar file");
   extractAll(asarFilePath, "op-gg-unpacked");
 
@@ -43,8 +58,7 @@ async function rebuildAddDir(asarFilePath) {
 
   for (let fileName of assetFiles) {
     if (fileName.endsWith(".js")) {
-      console.log(`Patching: ${fileName}`);
-      replaceAdFileContent(normalize(`${assetDir}/${fileName}`));
+      patchFile(normalize(`${assetDir}/${fileName}`));
     }
   }
 
@@ -53,34 +67,50 @@ async function rebuildAddDir(asarFilePath) {
     unpackDir: "{node_modules/node-ovhook,node_modules/rust-process}",
   });
 
-  console.log(`Deleted temporary directory`);
-  sync("op-gg-unpacked");
-}
-
-function killOpgg() {
-  console.log("Killing OPGG process");
-  process.platform === "darwin"
-    ? spawn("killall", ["-9", "OP.GG"])
-    : spawn("taskkill", ["/im", "OP.GG.exe", "/F"]);
+  rimraf("op-gg-unpacked", () => {
+    console.log(`scanDir: deleted temporary directory`)
+  });
   return;
 }
 
+function killProcess() {
+  console.log("killProcess: killing OPGG process");
+
+  if (process.platform === "darwin") {
+    spawn("killall", ["-9", "OP.GG"]);
+  }
+  else if (process.platform === "win32") {
+    spawn("taskkill", ["/im", "OP.GG.exe", "/F"]);
+  }
+  return;
+}
+
+function asarDir() {
+  let directory = null;
+
+  if (process.platform === "darwin") {
+    directory =  normalize("/Applications/OP.GG.app/Contents/Resources/app.asar");
+  } else if (process.platform === "win32") {
+    directory = normalize(
+      `${dirname(process.env.APPDATA)}/Local/Programs/OP.GG/resources/app.asar`);
+  }
+  else {
+    console.error("asarDir: platform not supported.")
+    exit(0);
+  }
+  return directory;
+}
+
 function main() {
-  const asarFilePath =
-    process.platform === "darwin"
-      ? normalize("/Applications/OP.GG.app/Contents/Resources/app.asar")
-      : normalize(
-          `${dirname(
-            process.env.APPDATA
-          )}/Local/Programs/OP.GG/resources/app.asar`
-        );
+  const asarFilePath = asarDir();
 
   if (!existsSync(asarFilePath)) {
-    console.log(`Cannot find asar file at ${asarFilePath}`);
+    console.error(`Cannot find asar file at ${asarFilePath}`);
     return 84;
   }
-  killOpgg();
-  rebuildAddDir(asarFilePath);
+  killProcess();
+  scanDir(asarFilePath);
+  return;
 }
 
 main();
