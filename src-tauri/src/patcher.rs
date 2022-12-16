@@ -1,3 +1,37 @@
+fn patch_file(path: std::path::PathBuf) -> std::io::Result<()> {
+    let mut file = std::fs::File::open(path)?;
+    let mut contents: String = String::new();
+    std::io::Read::read_to_string(&mut file, &mut contents)?;
+
+    let adsense_uri_patch: &str = "https://gist.githubusercontent.com/MidKnightXI/7ecf3cdd0a5804466cb790855e2524ae/raw/9b88cf64f3bb955edfff27bdfba72f5181d8748b/remover.txt";
+    let na: &str = r#"["US","CA"].includes"#;
+    let eu: &str = r#"["AD","AL","AT","AX","BA","BE","BG","BY","CH","CY","CZ","DE","DK","EE","ES","FI","FO","FR","GB","GG","GI","GR","HR","HU","IE","IM","IS","IT","JE","LI","LT","LU","LV","MC","MD","ME","MK","MT","NL","NO","PL","PT","RO","RS","RU","SE","SI","SJ","SK","SM","UA","VA","XK"].includes"#;
+
+    let patched_contents = contents
+        .replace("https://dtapp-player.op.gg/adsense.txt", adsense_uri_patch)
+        .replace("google-analytics.com/mp/collect", "gist.githubusercontent.com")
+        .replace(na, "[].includes")
+        .replace(eu, "[].includes");
+
+    // TODO: add REGEX replace
+
+    let mut file = std::fs::File::create(path)?;
+    std::io::Write::write_all(&mut file, patched_contents.as_bytes())?;
+
+    Ok(())
+}
+
+fn scan_dir(asar_file_path: &str) -> std::io::Result<()> {
+    let asset_dir: std::fs::ReadDir = std::fs::read_dir("opgg_unpacked/assets/react")?;
+
+    for file in asset_dir {
+        let file = file?;
+        if file.path().extension().unwrap_or_default() == "js" {
+            patch_file(file.path())?;
+        }
+    }
+    Ok(())
+}
 
 
 /// Unpack the asar archive located at `path`
@@ -133,7 +167,7 @@ pub fn remove_ads() -> Result<bool, String>
         return Err("remove_ads: OP.GG not found, make sure the app is installed.".to_string());
     }
     kill_opgg();
-    if !extract_all(path.to_str().unwrap(), "./")
+    if !extract_all(path.to_str().unwrap(), "./opgg_unpacked")
     {
         return Err("unpack_asar: cannot unpack asar archive.".to_string());
     }
