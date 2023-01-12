@@ -1,32 +1,22 @@
 {
-  "name": "opgg-patcher",
-  "version": "1.3",
-  "description": "ad remover for the electron app of opgg",
-  "main": "index.js",
-  "repository": "git@github.com:MidKnightXI/opgg-ads-remover.git",
-  "author": "MidKnightXI",
-  "license": "MIT",
-  "type": "module",
+  "name": "opgg-ads-remover",
+  "version": "0.0.0",
+  "description": "",
   "scripts": {
-    "lint:check": "eslint .",
-    "lint:fix": "eslint --fix .",
-    "bundle": "rollup --config",
-    "build": "rollup -c && pkg -o opgg-patcher -t node16-win-x64,node16-darwin-x64 bundle.js && chmod 755 opgg-patcher-macos && rm -f bundle.js",
-    "build:win": "rollup -c && pkg -o opgg-patcher-win -t node16-win-x64 bundle.js && rm -f bundle.js",
-    "build:win-arm": "rollup -c && pkg -o opgg-patcher-win-arm -t node16-win-arm64 bundle.js && rm -f bundle.js",
-    "build:darwin": "rollup -c && pkg -o opgg-patcher-macos -t node16-darwin-x64 bundle.js && chmod 755 opgg-patcher-macos && rm -f bundle.js"
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "tauri": "tauri"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.1.0",
+    "vite": "^3.0.0",
+    "vite-plugin-solid": "^2.3.0"
   },
   "dependencies": {
-    "@electron/asar": "^3.2.2",
-    "child_process": "^1.0.2",
-    "fs": "^0.0.1-security",
-    "path": "^0.12.7",
-    "rimraf": "^3.0.2"
-  },
-  "devDependencies": {
-    "eslint": "^8.17.0",
-    "eslint-config-prettier": "^8.5.0",
-    "pkg": "^5.7.0",
-    "rollup": "^2.75.6"
+    "@tauri-apps/api": "^1.1.0",
+    "solid-js": "^1.4.7"
   }
 }

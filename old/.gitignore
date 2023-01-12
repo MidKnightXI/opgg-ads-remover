@@ -1,6 +1,5 @@
 node_modules
-dist
-.DS_Store
 yarn.lock
 package-lock.json
-bun.lockb
+bundle.js
+opgg-ads-remover*
