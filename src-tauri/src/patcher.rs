@@ -1,3 +1,5 @@
+use asar::{AsarReader, AsarWriter};
+
 /// Replace the content of the specified file to delete advertisements' links.
 ///
 /// ## Arguments
@@ -10,15 +12,13 @@
 ///
 /// patch_file(path);
 ///```
-fn patch_file(path: std::path::PathBuf) -> std::io::Result<()>
+fn patch_file(file: String) -> String
 {
-    let mut content: String = std::fs::read_to_string(path.as_path())?;
-
     let adsense_uri_patch: &str = "https://gist.githubusercontent.com/MidKnightXI/7ecf3cdd0a5804466cb790855e2524ae/raw/9b88cf64f3bb955edfff27bdfba72f5181d8748b/remover.txt";
     let na: &str = r#"["US","CA"].includes"#;
     let eu: &str = r#"["AD","AL","AT","AX","BA","BE","BG","BY","CH","CY","CZ","DE","DK","EE","ES","FI","FO","FR","GB","GG","GI","GR","HR","HU","IE","IM","IS","IT","JE","LI","LT","LU","LV","MC","MD","ME","MK","MT","NL","NO","PL","PT","RO","RS","RU","SE","SI","SJ","SK","SM","UA","VA","XK"].includes"#;
 
-    let patched_content: String = content
+    let patched_file: String = file
         .replace("https://dtapp-player.op.gg/adsense.txt", adsense_uri_patch)
         .replace("google-analytics.com/mp/collect", "gist.githubusercontent.com")
         .replace(na, "[].includes")
@@ -28,23 +28,8 @@ fn patch_file(path: std::path::PathBuf) -> std::io::Result<()>
         .replace(r#"exports\.adsenseAds=\w;"#, "exports.adsenseAds=[];")
         .replace(r#"exports\.playwireAds=\w;"#, "exports.playwireAds=[];")
         .replace(r#"exports\.nitropayAds=\w;"#, "exports.nitropayAds=[];");
-
-    std::fs::write(path, patched_content)?;
-    Ok(())
+    return patched_file;
 }
-
-fn scan_dir(asar_file_path: &str) -> std::io::Result<()> {
-    let asset_dir: std::fs::ReadDir = std::fs::read_dir("opgg_unpacked/assets/react")?;
-
-    for file in asset_dir {
-        let file = file?;
-        if file.path().extension().unwrap_or_default() == "js" {
-            patch_file(file.path())?;
-        }
-    }
-    Ok(())
-}
-
 
 /// Unpack the asar archive located at `path`
 ///
@@ -58,10 +43,29 @@ fn scan_dir(asar_file_path: &str) -> std::io::Result<()> {
 ///
 /// unpack_asar(path);
 /// ```
-fn extract_all(path: std::path::PathBuf) -> bool
+fn extract_all(asar_path: std::path::PathBuf) -> asar::Result<()>
 {
-    // dest: "./opgg_unpacked"
-    return false;
+    let asar_file: Vec<u8> = std::fs::read(asar_path.clone())?;
+    let asar_r: AsarReader = AsarReader::new(&asar_file, asar_path.clone())?;
+    let mut asar_w: AsarWriter = AsarWriter::new();
+
+    for path in asar_r.files().keys()
+    {
+        let path_str = path.to_str().unwrap();
+        let file = asar_r.files().get(path).unwrap();
+        if path_str.starts_with("assets/react") && path_str.ends_with(".js")
+        {
+            let patched = patch_file(String::from_utf8(file.data().to_vec()).unwrap());
+            asar_w.write_file(path.as_path(), patched.as_bytes(), false)?;
+
+        }
+        else
+        {
+            asar_w.write_file(path.as_path(), file.data(), false)?;
+        }
+    }
+    asar_w.finalize(std::fs::File::create(asar_path)?)?;
+    Ok(())
 }
 
 /// Spawn a process to kill OP.GG process
@@ -146,9 +150,10 @@ pub fn remove_ads() -> Result<bool, String>
         return Err("remove_ads: OP.GG not found, make sure the app is installed.".to_string());
     }
     kill_opgg();
-    if !extract_all(path)
+    match extract_all(path)
     {
-        return Err("unpack_asar: cannot unpack asar archive.".to_string());
+        Ok(_) => {},
+        Err(e) => return Err(format!("extract_all: {e}"))
     }
-    return Ok(true);
+    Ok(true)
 }
