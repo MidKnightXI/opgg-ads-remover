@@ -112,7 +112,7 @@ fn format_asar_path() -> Result<std::path::PathBuf, String>
     }
     else if std::env::consts::OS == "windows"
     {
-        match std::env::var("APP_DATA") {
+        match std::env::var("APPDATA") {
             Ok(v) => path = format!(
                 "{}/Local/Programs/OP.GG/resources/app.asar",
                 v),
