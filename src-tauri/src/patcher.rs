@@ -49,12 +49,14 @@ fn extract_all(asar_path: std::path::PathBuf) -> asar::Result<()>
     let asar_r: AsarReader = AsarReader::new(&asar_file, asar_path.clone())?;
     let mut asar_w: AsarWriter = AsarWriter::new();
 
+    println!("extract_all: scanning files of the archive.");
     for path in asar_r.files().keys()
     {
         let path_str = path.to_str().unwrap();
         let file = asar_r.files().get(path).unwrap();
         if path_str.starts_with("assets/react") && path_str.ends_with(".js")
         {
+            println!("patch_file: removing ads from {}", path_str);
             let patched = patch_file(String::from_utf8(file.data().to_vec()).unwrap());
             asar_w.write_file(path.as_path(), patched.as_bytes(), false)?;
 
@@ -103,21 +105,20 @@ fn kill_opgg()
 /// * Failure - returns a String containing the error
 fn format_asar_path() -> Result<std::path::PathBuf, String>
 {
-    let path: String;
+    let path: std::path::PathBuf;
 
     println!("format_asar_path: determining platform.");
     if std::env::consts::OS == "macos"
     {
-        path = "/Applications/OP.GG.app/Contents/Resources/app.asar".to_string();
+        path = std::path::PathBuf::from("/Applications/OP.GG.app/Contents/Resources/app.asar");
     }
     else if std::env::consts::OS == "windows"
     {
-        match std::env::var("APPDATA") {
-            Ok(v) => path = format!(
-                "{}/Local/Programs/OP.GG/resources/app.asar",
-                v),
+        let appdata = match std::env::var("APPDATA") {
+            Ok(v) => v,
             Err(e) => return Err(format!("format_asar_path: {e}"))
         };
+        path = std::path::PathBuf::from(appdata).join("Local/Programs/OP.GG/resources/app.asar");
     }
     else
     {
