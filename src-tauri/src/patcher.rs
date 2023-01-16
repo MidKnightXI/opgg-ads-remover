@@ -118,7 +118,7 @@ fn format_asar_path() -> Result<std::path::PathBuf, String>
             Ok(v) => v,
             Err(e) => return Err(format!("format_asar_path: {e}"))
         };
-        path = std::path::PathBuf::from(appdata).join("Local/Programs/OP.GG/resources/app.asar");
+        path = std::path::PathBuf::from(appdata).join("Local\\Programs\\OP.GG\\resources\\app.asar");
     }
     else
     {
