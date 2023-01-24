@@ -8,8 +8,8 @@ Patcher removing ads from the desktop application [OP.GG](https://op.gg/desktop/
 
 Click on your platform:
 
-* [Windows](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/v1.3/opgg-patcher-win.zip)
-* [macOS](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/master/OPGG.Patcher_2.0.5.dmg)
+* [Windows](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/master/OPGG.Patcher_2.0.6.msi)
+* [macOS](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/master/OPGG.Patcher_2.0.6.dmg)
 
 ### Build it yourself
 
