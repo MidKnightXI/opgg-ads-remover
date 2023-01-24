@@ -54,7 +54,7 @@ fn extract_all(asar_path: std::path::PathBuf) -> asar::Result<()>
     {
         let path_str = path.to_str().unwrap();
         let file = asar_r.files().get(path).unwrap();
-        if path_str.starts_with("assets/react") && path_str.ends_with(".js")
+        if (path_str.starts_with("assets/react") || path_str.starts_with(r"assets\react")) && path_str.ends_with(".js")
         {
             println!("patch_file: removing ads from {}", path_str);
             let patched = patch_file(String::from_utf8(file.data().to_vec()).unwrap());
