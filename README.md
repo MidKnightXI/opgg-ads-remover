@@ -14,7 +14,7 @@ Click on your platform:
 ### Build it yourself
 
 * Clone the repository: `git clone https://github.com/MidKnightXI/opgg-ads-remover.git`
-* Open the directory in a shell terminal and run: `yarn install && yarn tauri build`
+* Open the directory in a shell terminal and run: `yarn && yarn tauri build`
 * Double click on the executable
 
 # Contributing
