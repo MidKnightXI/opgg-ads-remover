@@ -48,9 +48,10 @@ fn extract_all(asar_path: std::path::PathBuf) -> asar::Result<()>
     let asar_file: Vec<u8> = std::fs::read(asar_path.clone())?;
     let asar_r: AsarReader = AsarReader::new(&asar_file, asar_path.clone())?;
     let mut asar_w: AsarWriter = AsarWriter::new();
+    let files = asar_r.files();
 
     println!("extract_all: scanning files of the archive.");
-    for path in asar_r.files().keys()
+    for path in files.keys()
     {
         let path_str = path.to_str().unwrap();
         let file = asar_r.files().get(path).unwrap();
@@ -59,7 +60,6 @@ fn extract_all(asar_path: std::path::PathBuf) -> asar::Result<()>
             println!("patch_file: removing ads from {}", path_str);
             let patched = patch_file(String::from_utf8(file.data().to_vec()).unwrap());
             asar_w.write_file(path.as_path(), patched.as_bytes(), false)?;
-
         }
         else
         {
