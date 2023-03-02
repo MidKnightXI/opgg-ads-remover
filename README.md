@@ -26,7 +26,7 @@ Here are some basic steps you need to follow to contribute to the project:
 - Open where it's located `C:\Users\$USER\AppData\Local\Programs\OP.GG\ressources`
 - Copy `app.asar` and `app.asar.unpacked` to the location you want
 - Install the [asar tool](https://github.com/electron/asar) from electron team with npm in the folder you put the asar archive
-- Open `package.json` and add
+- Open `package.json` and add:
 ```json
 "script": {
     "asar": "asar e app.asar archive"
