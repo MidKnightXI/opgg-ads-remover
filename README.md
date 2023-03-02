@@ -22,7 +22,7 @@ Click on your platform:
 If you want to contribute to the project just fork the project and open a pull request describing the problem that you're solving.
 
 Here are some basic steps you need to follow to contribute to the project:
-- Download OPGG
+- Download [OP.GG](https://op.gg/desktop/?utm_source=opgg&utm_medium=button&utm_campaign=global)
 - Open where it's located `C:\Users\$USER\AppData\Local\Programs\OP.GG\ressources`
 - Copy `app.asar` and `app.asar.unpacked` to the place you want
 - Install [asar tool](https://github.com/electron/asar) from electron team with npm in the folder you put the archive
