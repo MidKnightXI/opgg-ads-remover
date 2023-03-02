@@ -17,7 +17,7 @@ Click on your platform:
 * Open the directory in a shell terminal and run: `yarn && yarn tauri build`
 * Double click on the executable
 
-### Contribute
+# Contribute
 
 If you want to contribute to the project just fork the project and open a pull request describing the problem that you're solving.
 
