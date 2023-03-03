@@ -32,7 +32,7 @@ Here are some basic steps you need to follow to contribute to the project:
     "asar": "asar e app.asar archive"
 }
 ```
-- Run `yarn asar` and go to `archive\assets\main\main.js`
+- Run `npm run asar` and go to `archive\assets\main\main.js`
 - Work on it ✨
 
 # Contributing
