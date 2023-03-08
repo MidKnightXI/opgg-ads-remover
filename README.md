@@ -2,18 +2,18 @@
 
 Patcher removing ads from the desktop application [OP.GG](https://op.gg/desktop/?utm_source=opgg&utm_medium=button&utm_campaign=global).
 
-## Installation
+# Installation
 
 * [Windows](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/master/OPGG.Patcher_2.0.6.msi)
 * [macOS](https://github.com/MidKnightXI/opgg-ads-remover/releases/download/master/OPGG.Patcher_2.0.6.dmg)
 
-### Build it yourself
+# Build it yourself
 
 * Clone the repository: `git clone https://github.com/MidKnightXI/opgg-ads-remover.git`
 * Open the directory in a shell terminal and run: `yarn && yarn tauri build`
 * Double click on the executable
 
-## Contribute
+# Contribute
 
 If you want to contribute to the project just fork the project and open a pull request describing the problem that you're solving.
 
