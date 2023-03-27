@@ -14,7 +14,15 @@ use asar::{AsarReader, AsarWriter};
 ///```
 fn patch_file(file: String) -> String
 {
-    return file;
+    let gist: &str = "https://gist.githubusercontent.com";
+
+    let patched_file: String = file
+        .replace(r#"checkIfChromeDirectoryExists("Default")"#, r#"checkIfChromeDirectoryExists("NoChrome:((((??")"#)
+        .replace(r#"AppData\Local\Google\Chrome\User Data"#, r#"AppData\Local\Google\Carbon\Privacy?"#)
+        .replace("https://desktop.op.gg/api/tracking/ow", &gist)
+        .replace("https://geo-internal.op.gg/api/current-ip", &gist);
+
+    return patched_file;
 }
 
 /// Scan the asar archive located at `asar_path`
