@@ -15,12 +15,14 @@ use asar::{AsarReader, AsarWriter};
 fn patch_file(file: String) -> String
 {
     let gist: &str = "https://gist.githubusercontent.com";
+    let cloudflare: &str = "https://op-gg-remove-ads.shyim.workers.dev";
 
     let patched_file: String = file
         .replace(r#"checkIfChromeDirectoryExists("Default")"#, r#"checkIfChromeDirectoryExists("NoChrome:((((??")"#)
         .replace(r#"AppData\Local\Google\Chrome\User Data"#, r#"AppData\Local\Google\Carbon\Privacy?"#)
         .replace("https://desktop.op.gg/api/tracking/ow", &gist)
-        .replace("https://geo-internal.op.gg/api/current-ip", &gist);
+        .replace("https://geo-internal.op.gg/api/current-ip", &gist)
+        .replace("https://opgg-desktop-data.akamaized.net", &cloudflare);
 
     return patched_file;
 }
@@ -50,9 +52,9 @@ fn scan_all(asar_path: std::path::PathBuf) -> asar::Result<()>
         let path_str = path.to_str().unwrap();
         let file = asar_r.files().get(path).unwrap();
 
-        if path_str == "assets/main/main.js" || path_str == r"assets\main\main.js"
+        if (path_str.starts_with("assets/main") || path_str.starts_with(r"assets\main\main.js")) && path_str.ends_with(".js")
         {
-            println!("scan_all: removing ads to {}", path_str);
+            println!("scan_all: removing ads of {}", path_str);
             let patched = patch_file(
                 String::from_utf8(file.data().to_vec()).unwrap()
             );
@@ -60,7 +62,6 @@ fn scan_all(asar_path: std::path::PathBuf) -> asar::Result<()>
         }
         else
         {
-            println!("scan_all: writing {} to the new archive", path_str);
             asar_w.write_file(path.as_path(), file.data(), false)?;
         }
     }
