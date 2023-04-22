@@ -38,5 +38,6 @@ Here are some basic steps you need to follow to contribute to the project:
   <tr>
     <td align="center"><a href="https://github.com/MidKnightXI"><img src="https://avatars.githubusercontent.com/u/35759490?v=4" width="100px;" alt=""/><br /><sub><b> MidKnightXI </b></sub></a><br /><a href="https://github.com/MidKnightXI/opgg-ads-remover/commits?author=MidKnightXI" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/BlossomiShymae"><img src="https://avatars.githubusercontent.com/u/87099578?v=4" width="100px;" alt=""/><br /><sub><b> Blossomi Shymae </b></sub></a><br /><a href="https://github.com/MidKnightXI/opgg-ads-remover/commits?author=MissUwuieTime" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Shyim"><img src="https://avatars.githubusercontent.com/u/6224096?v=4" width="100px;" alt=""/><br /><sub><b> Shyim </b></sub></a><br /><a href="https://github.com/shyim/op-gg-remove-ads" title="Code">💻</a></td>
   </tr>
 </table>
