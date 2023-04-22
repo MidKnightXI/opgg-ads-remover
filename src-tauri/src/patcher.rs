@@ -22,6 +22,7 @@ fn patch_file(file: String) -> String
         .replace(r#"AppData\Local\Google\Chrome\User Data"#, r#"AppData\Local\Google\Carbon\Privacy?"#)
         .replace("https://desktop.op.gg/api/tracking/ow", &gist)
         .replace("https://geo-internal.op.gg/api/current-ip", &gist)
+        .replace("app.labs.sydney", "op-gg-remove-ads.shyim.workers.dev")
         .replace("https://opgg-desktop-data.akamaized.net", &cloudflare);
 
     return patched_file;
