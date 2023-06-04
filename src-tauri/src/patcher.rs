@@ -5,14 +5,14 @@ use asar::{AsarReader, AsarWriter};
 /// Remove ads from the file.
 ///
 /// ## Arguments
-///
-/// * `path` - `std::path::PathBuf` containing the path of the file to patch.
+/// * `file` - [`String`] containing the content of the file to patch.
 ///
 /// ## Example
 /// ```
-/// let path = String::from("/path/to/file");
+/// let file_path = "path/to/file.js";
+/// let contents = fs::read_to_string(file_path).unwrap();
 ///
-/// patch_file(path);
+/// patch_file(content);
 ///```
 #[cfg(target_os = "windows")]
 fn patch_file(file: String) -> String
@@ -34,14 +34,14 @@ fn patch_file(file: String) -> String
 /// Replace the content of the specified file to delete advertisements' links.
 ///
 /// ## Arguments
-///
-/// * `path` - `String` containing the path of the file to patch.
+/// * `file` - [`String`] containing the content of the file to patch.
 ///
 /// ## Example
 /// ```
-/// let path = String::from("/path/to/file");
+/// let file_path = "path/to/file.js";
+/// let contents = fs::read_to_string(file_path).unwrap();
 ///
-/// patch_file(path);
+/// patch_file(content);
 ///```
 #[cfg(target_os = "macos")]
 fn patch_file(file: String) -> String
@@ -67,12 +67,11 @@ fn patch_file(file: String) -> String
 /// Scan the asar archive located at `asar_path`
 ///
 /// ## Arguments
+/// * `asar_path` - [`PathBuf`] containing the path to the asar archive.
 ///
-/// * `asar_path` - `std::path::PathBuf` containing the path to the asar archive.
-///
-/// # Example
+/// ## Example
 /// ```
-/// let asar_path = std::path::PathBuf::from("/path/to/archive");
+/// let asar_path = std::path::PathBuf::from("/path/to/archive.asar");
 ///
 /// scan_all(asar_path);
 /// ```
@@ -112,12 +111,11 @@ fn scan_all(asar_path: PathBuf) -> asar::Result<()>
 /// Scan the asar archive located at `asar_path`
 ///
 /// ## Arguments
+/// * `asar_path` - [`PathBuf`] containing the path to the asar archive.
 ///
-/// * `asar_path` - `std::path::PathBuf` containing the path to the asar archive.
-///
-/// # Example
+/// ## Example
 /// ```
-/// let asar_path = std::path::PathBuf::from("/path/to/file");
+/// let asar_path = std::path::PathBuf::from("/path/to/archive.asar");
 ///
 /// scan_all_old(asar_path);
 /// ```
@@ -167,7 +165,7 @@ fn kill_opgg()
     }
     else if std::env::consts::OS == "windows"
     {
-        // let CREATE_NO_WINDOW = 0x08000000;
+        // const CREATE_NO_WINDOW = 0x08000000;
         process = Command::new("taskkill");
         process.args(&["/im", "OP.GG.exe", "/F"]);
     }
@@ -183,7 +181,6 @@ fn kill_opgg()
 /// Returns the path to OP.GG based on which platform the user is using
 ///
 /// ## Returns
-///
 /// * Success - returns the canonicalize version of the path to OP.GG app directory
 /// * Failure - returns a String containing the error
 fn format_asar_path() -> Result<PathBuf, String>
@@ -217,7 +214,6 @@ fn format_asar_path() -> Result<PathBuf, String>
 /// Main function for the patcher mod
 ///
 /// ## Returns
-///
 /// * Success - returns `true`
 /// * Failure - returns a String containing the error
 pub fn remove_ads() -> Result<bool, String>
