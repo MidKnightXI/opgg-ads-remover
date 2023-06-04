@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use asar::{AsarReader, AsarWriter};
 
 /// Remove ads from the file.
@@ -8,22 +10,56 @@ use asar::{AsarReader, AsarWriter};
 ///
 /// ## Example
 /// ```
-/// let path = std::path::PathBuf::from("/path/to/file");
+/// let path = String::from("/path/to/file");
 ///
 /// patch_file(path);
 ///```
+#[cfg(target_os = "windows")]
 fn patch_file(file: String) -> String
 {
-    let gist: &str = "https://gist.githubusercontent.com";
-    let cloudflare: &str = "https://op-gg-remove-ads.shyim.workers.dev";
+    const GIST: &str = "https://gist.githubusercontent.com";
+    const CLOUDFLARE: &str = "https://op-gg-remove-ads.shyim.workers.dev";
 
     let patched_file: String = file
         .replace(r#"checkIfChromeDirectoryExists("Default")"#, r#"checkIfChromeDirectoryExists("NoChrome:((((??")"#)
         .replace(r#"AppData\Local\Google\Chrome\User Data"#, r#"AppData\Local\Google\Carbon\Privacy?"#)
-        .replace("https://desktop.op.gg/api/tracking/ow", &gist)
-        .replace("https://geo-internal.op.gg/api/current-ip", &gist)
+        .replace("https://desktop.op.gg/api/tracking/ow", GIST)
+        .replace("https://geo-internal.op.gg/api/current-ip", GIST)
         .replace("app.labs.sydney", "op-gg-remove-ads.shyim.workers.dev")
-        .replace("https://opgg-desktop-data.akamaized.net", &cloudflare);
+        .replace("https://opgg-desktop-data.akamaized.net", CLOUDFLARE);
+
+    return patched_file;
+}
+
+/// Replace the content of the specified file to delete advertisements' links.
+///
+/// ## Arguments
+///
+/// * `path` - `String` containing the path of the file to patch.
+///
+/// ## Example
+/// ```
+/// let path = String::from("/path/to/file");
+///
+/// patch_file(path);
+///```
+#[cfg(target_os = "macos")]
+fn patch_file(file: String) -> String
+{
+    const ADSENSE_URI: &str = "https://gist.githubusercontent.com/MidKnightXI/7ecf3cdd0a5804466cb790855e2524ae/raw/9b88cf64f3bb955edfff27bdfba72f5181d8748b/remover.txt";
+    const NA: &str = r#"["US","CA"].includes"#;
+    const EU: &str = r#"["AD","AL","AT","AX","BA","BE","BG","BY","CH","CY","CZ","DE","DK","EE","ES","FI","FO","FR","GB","GG","GI","GR","HR","HU","IE","IM","IS","IT","JE","LI","LT","LU","LV","MC","MD","ME","MK","MT","NL","NO","PL","PT","RO","RS","RU","SE","SI","SJ","SK","SM","UA","VA","XK"].includes"#;
+
+    let patched_file: String = file
+        .replace("https://dtapp-player.op.gg/adsense.txt", ADSENSE_URI)
+        .replace("google-analytics.com/mp/collect", "gist.githubusercontent.com")
+        .replace(NA, "[].includes")
+        .replace(EU, "[].includes")
+        .replace(r#"exports\.countryHasAds=\w;"#, "exports.countryHasAds=[];")
+        .replace(r#"exports\.countryHasAdsAdsense=\w;"#, "exports.countryHasAdsAdsense=[];")
+        .replace(r#"exports\.adsenseAds=\w;"#, "exports.adsenseAds=[];")
+        .replace(r#"exports\.playwireAds=\w;"#, "exports.playwireAds=[];")
+        .replace(r#"exports\.nitropayAds=\w;"#, "exports.nitropayAds=[];");
 
     return patched_file;
 }
@@ -40,11 +76,12 @@ fn patch_file(file: String) -> String
 ///
 /// scan_all(asar_path);
 /// ```
-fn scan_all(asar_path: std::path::PathBuf) -> asar::Result<()>
+#[cfg(target_os = "windows")]
+fn scan_all(asar_path: PathBuf) -> asar::Result<()>
 {
     let asar_file: Vec<u8> = std::fs::read(asar_path.clone())?;
-    let asar_r: AsarReader = AsarReader::new(&asar_file, asar_path.clone())?;
-    let mut asar_w: AsarWriter = AsarWriter::new();
+    let asar_r = AsarReader::new(&asar_file, asar_path.clone())?;
+    let mut asar_w = AsarWriter::new();
     let paths = asar_r.files();
 
     println!("scan_all: scanning files from the archive.");
@@ -66,40 +103,10 @@ fn scan_all(asar_path: std::path::PathBuf) -> asar::Result<()>
             asar_w.write_file(path.as_path(), file.data(), false)?;
         }
     }
+
     println!("scan_all: rebuilding asar archive");
     asar_w.finalize(std::fs::File::create(asar_path)?)?;
     Ok(())
-}
-
-/// Replace the content of the specified file to delete advertisements' links.
-///
-/// ## Arguments
-///
-/// * `path` - `std::path::PathBuf` containing the path of the file to patch.
-///
-/// ## Example
-/// ```
-/// let path = std::path::PathBuf::from("/path/to/file");
-///
-/// patch_file(path);
-///```
-fn patch_file_old(file: String) -> String
-{
-    let adsense_uri_patch: &str = "https://gist.githubusercontent.com/MidKnightXI/7ecf3cdd0a5804466cb790855e2524ae/raw/9b88cf64f3bb955edfff27bdfba72f5181d8748b/remover.txt";
-    let na: &str = r#"["US","CA"].includes"#;
-    let eu: &str = r#"["AD","AL","AT","AX","BA","BE","BG","BY","CH","CY","CZ","DE","DK","EE","ES","FI","FO","FR","GB","GG","GI","GR","HR","HU","IE","IM","IS","IT","JE","LI","LT","LU","LV","MC","MD","ME","MK","MT","NL","NO","PL","PT","RO","RS","RU","SE","SI","SJ","SK","SM","UA","VA","XK"].includes"#;
-
-    let patched_file: String = file
-        .replace("https://dtapp-player.op.gg/adsense.txt", adsense_uri_patch)
-        .replace("google-analytics.com/mp/collect", "gist.githubusercontent.com")
-        .replace(na, "[].includes")
-        .replace(eu, "[].includes")
-        .replace(r#"exports\.countryHasAds=\w;"#, "exports.countryHasAds=[];")
-        .replace(r#"exports\.countryHasAdsAdsense=\w;"#, "exports.countryHasAdsAdsense=[];")
-        .replace(r#"exports\.adsenseAds=\w;"#, "exports.adsenseAds=[];")
-        .replace(r#"exports\.playwireAds=\w;"#, "exports.playwireAds=[];")
-        .replace(r#"exports\.nitropayAds=\w;"#, "exports.nitropayAds=[];");
-    return patched_file;
 }
 
 /// Scan the asar archive located at `asar_path`
@@ -114,22 +121,25 @@ fn patch_file_old(file: String) -> String
 ///
 /// scan_all_old(asar_path);
 /// ```
-fn scan_all_old(asar_path: std::path::PathBuf) -> asar::Result<()>
+#[cfg(target_os = "macos")]
+fn scan_all(asar_path: PathBuf) -> asar::Result<()>
 {
     let asar_file: Vec<u8> = std::fs::read(asar_path.clone())?;
-    let asar_r: AsarReader = AsarReader::new(&asar_file, asar_path.clone())?;
-    let mut asar_w: AsarWriter = AsarWriter::new();
+    let asar_r = AsarReader::new(&asar_file, asar_path.clone())?;
+    let mut asar_w = AsarWriter::new();
     let files = asar_r.files();
 
-    println!("extract_all: scanning files of the archive.");
+    println!("scan_all: scanning files of the archive.");
     for path in files.keys()
     {
-        let path_str = path.to_str().unwrap();
         let file = asar_r.files().get(path).unwrap();
-        if (path_str.starts_with("assets/react") || path_str.starts_with(r"assets\react")) && path_str.ends_with(".js")
+
+        if path.starts_with("assets/react") && path.ends_with(".js")
         {
-            println!("patch_file: removing ads from {}", path_str);
-            let patched = patch_file_old(String::from_utf8(file.data().to_vec()).unwrap());
+            println!("patch_file: removing ads from {}", path.to_str().unwrap());
+            let patched = patch_file(
+                String::from_utf8(file.data().to_vec()).unwrap()
+            );
             asar_w.write_file(path.as_path(), patched.as_bytes(), false)?;
         }
         else
@@ -137,6 +147,8 @@ fn scan_all_old(asar_path: std::path::PathBuf) -> asar::Result<()>
             asar_w.write_file(path.as_path(), file.data(), false)?;
         }
     }
+
+    println!("scan_all: rebuilding asar archive");
     asar_w.finalize(std::fs::File::create(asar_path)?)?;
     Ok(())
 }
@@ -174,14 +186,14 @@ fn kill_opgg()
 ///
 /// * Success - returns the canonicalize version of the path to OP.GG app directory
 /// * Failure - returns a String containing the error
-fn format_asar_path() -> Result<std::path::PathBuf, String>
+fn format_asar_path() -> Result<PathBuf, String>
 {
-    let path: std::path::PathBuf;
+    let path: PathBuf;
 
     println!("format_asar_path: determining platform.");
     if std::env::consts::OS == "macos"
     {
-        path = std::path::PathBuf::from("/Applications/OP.GG.app/Contents/Resources/app.asar");
+        path = PathBuf::from("/Applications/OP.GG.app/Contents/Resources/app.asar");
     }
     else if std::env::consts::OS == "windows"
     {
@@ -189,7 +201,7 @@ fn format_asar_path() -> Result<std::path::PathBuf, String>
             Ok(v) => v,
             Err(e) => return Err(format!("format_asar_path: {e}"))
         };
-        path = std::path::PathBuf::from(appdata).join("Programs/OP.GG/resources/app.asar");
+        path = PathBuf::from(appdata).join("Programs/OP.GG/resources/app.asar");
     }
     else
     {
@@ -210,10 +222,8 @@ fn format_asar_path() -> Result<std::path::PathBuf, String>
 /// * Failure - returns a String containing the error
 pub fn remove_ads() -> Result<bool, String>
 {
-    let path: std::path::PathBuf;
-
-    match format_asar_path() {
-        Ok(val) => path = val,
+    let path: PathBuf = match format_asar_path() {
+        Ok(path) => path,
         Err(e) => return Err(e)
     };
 
@@ -223,21 +233,11 @@ pub fn remove_ads() -> Result<bool, String>
     }
 
     kill_opgg();
-    if std::env::consts::OS == "windows"
+    match scan_all(path)
     {
-        match scan_all(path)
-        {
-            Ok(_) => {},
-            Err(e) => return Err(format!("extract_all: {e}"))
-        }
+        Ok(_) => {},
+        Err(e) => return Err(format!("extract_all: {e}"))
     }
-    else
-    {
-        match scan_all_old(path)
-        {
-            Ok(_) => {},
-            Err(e) => return Err(format!("extract_all: {e}"))
-        }
-    }
+
     Ok(true)
 }
