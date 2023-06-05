@@ -89,7 +89,7 @@ fn scan_all(asar_path: PathBuf) -> asar::Result<()>
         let path_str = path.to_str().unwrap();
         let file = asar_r.files().get(path).unwrap();
 
-        if (path_str.starts_with("assets/main") || path_str.starts_with(r"assets\main\main.js")) && path_str.ends_with(".js")
+        if path_str.eq(r"assets\main\main.js")
         {
             println!("scan_all: removing ads of {}", path_str);
             let patched = patch_file(
