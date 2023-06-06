@@ -9,7 +9,7 @@ mod patcher;
 fn patch() -> String {
     match patcher::remove_ads() {
         Ok(_v) => return "Patched Successfully".to_string(),
-        Err(e) => return e
+        Err(e) => return e,
     }
 }
 

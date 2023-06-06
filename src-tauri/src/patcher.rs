@@ -15,14 +15,19 @@ use asar::{AsarReader, AsarWriter};
 /// patch_file(content);
 ///```
 #[cfg(target_os = "windows")]
-fn patch_file(file: String) -> String
-{
+fn patch_file(file: String) -> String {
     const GIST: &str = "https://gist.githubusercontent.com";
     const CLOUDFLARE: &str = "https://op-gg-remove-ads.shyim.workers.dev";
 
     let patched_file: String = file
-        .replace(r#"checkIfChromeDirectoryExists("Default")"#, r#"checkIfChromeDirectoryExists("NoChrome:((((??")"#)
-        .replace(r#"AppData\Local\Google\Chrome\User Data"#, r#"AppData\Local\Google\Carbon\Privacy?"#)
+        .replace(
+            r#"checkIfChromeDirectoryExists("Default")"#,
+            r#"checkIfChromeDirectoryExists("NoChrome:((((??")"#,
+        )
+        .replace(
+            r#"AppData\Local\Google\Chrome\User Data"#,
+            r#"AppData\Local\Google\Carbon\Privacy?"#,
+        )
         .replace("https://desktop.op.gg/api/tracking/ow", GIST)
         .replace("https://geo-internal.op.gg/api/current-ip", GIST)
         .replace("app.labs.sydney", "op-gg-remove-ads.shyim.workers.dev")
@@ -44,19 +49,24 @@ fn patch_file(file: String) -> String
 /// patch_file(content);
 ///```
 #[cfg(target_os = "macos")]
-fn patch_file(file: String) -> String
-{
+fn patch_file(file: String) -> String {
     const ADSENSE_URI: &str = "https://gist.githubusercontent.com/MidKnightXI/7ecf3cdd0a5804466cb790855e2524ae/raw/9b88cf64f3bb955edfff27bdfba72f5181d8748b/remover.txt";
     const NA: &str = r#"["US","CA"].includes"#;
     const EU: &str = r#"["AD","AL","AT","AX","BA","BE","BG","BY","CH","CY","CZ","DE","DK","EE","ES","FI","FO","FR","GB","GG","GI","GR","HR","HU","IE","IM","IS","IT","JE","LI","LT","LU","LV","MC","MD","ME","MK","MT","NL","NO","PL","PT","RO","RS","RU","SE","SI","SJ","SK","SM","UA","VA","XK"].includes"#;
 
     let patched_file: String = file
+        .replace(
+            "google-analytics.com/mp/collect",
+            "gist.githubusercontent.com",
+        )
+        .replace(
+            r#"exports\.countryHasAdsAdsense=\w;"#,
+            "exports.countryHasAdsAdsense=[];",
+        )
         .replace("https://dtapp-player.op.gg/adsense.txt", ADSENSE_URI)
-        .replace("google-analytics.com/mp/collect", "gist.githubusercontent.com")
         .replace(NA, "[].includes")
         .replace(EU, "[].includes")
         .replace(r#"exports\.countryHasAds=\w;"#, "exports.countryHasAds=[];")
-        .replace(r#"exports\.countryHasAdsAdsense=\w;"#, "exports.countryHasAdsAdsense=[];")
         .replace(r#"exports\.adsenseAds=\w;"#, "exports.adsenseAds=[];")
         .replace(r#"exports\.playwireAds=\w;"#, "exports.playwireAds=[];")
         .replace(r#"exports\.nitropayAds=\w;"#, "exports.nitropayAds=[];");
@@ -76,29 +86,22 @@ fn patch_file(file: String) -> String
 /// scan_all(asar_path);
 /// ```
 #[cfg(target_os = "windows")]
-fn scan_all(asar_path: PathBuf) -> asar::Result<()>
-{
+fn scan_all(asar_path: PathBuf) -> asar::Result<()> {
     let asar_file: Vec<u8> = std::fs::read(asar_path.clone())?;
     let asar_r = AsarReader::new(&asar_file, asar_path.clone())?;
     let mut asar_w = AsarWriter::new();
     let paths = asar_r.files();
 
     println!("scan_all: scanning files from the archive.");
-    for path in paths.keys()
-    {
+    for path in paths.keys() {
         let path_str = path.to_str().unwrap();
         let file = asar_r.files().get(path).unwrap();
 
-        if path_str.eq(r"assets\main\main.js")
-        {
+        if path_str.eq(r"assets\main\main.js") {
             println!("scan_all: removing ads of {}", path_str);
-            let patched = patch_file(
-                String::from_utf8(file.data().to_vec()).unwrap()
-            );
+            let patched = patch_file(String::from_utf8(file.data().to_vec()).unwrap());
             asar_w.write_file(path.as_path(), patched.as_bytes(), false)?;
-        }
-        else
-        {
+        } else {
             asar_w.write_file(path.as_path(), file.data(), false)?;
         }
     }
@@ -120,28 +123,21 @@ fn scan_all(asar_path: PathBuf) -> asar::Result<()>
 /// scan_all_old(asar_path);
 /// ```
 #[cfg(target_os = "macos")]
-fn scan_all(asar_path: PathBuf) -> asar::Result<()>
-{
+fn scan_all(asar_path: PathBuf) -> asar::Result<()> {
     let asar_file: Vec<u8> = std::fs::read(asar_path.clone())?;
     let asar_r = AsarReader::new(&asar_file, asar_path.clone())?;
     let mut asar_w = AsarWriter::new();
     let files = asar_r.files();
 
     println!("scan_all: scanning files of the archive.");
-    for path in files.keys()
-    {
+    for path in files.keys() {
         let file = asar_r.files().get(path).unwrap();
 
-        if path.starts_with("assets/react") && path.ends_with(".js")
-        {
+        if path.starts_with("assets/react") && path.ends_with(".js") {
             println!("patch_file: removing ads from {}", path.to_str().unwrap());
-            let patched = patch_file(
-                String::from_utf8(file.data().to_vec()).unwrap()
-            );
+            let patched = patch_file(String::from_utf8(file.data().to_vec()).unwrap());
             asar_w.write_file(path.as_path(), patched.as_bytes(), false)?;
-        }
-        else
-        {
+        } else {
             asar_w.write_file(path.as_path(), file.data(), false)?;
         }
     }
@@ -152,25 +148,19 @@ fn scan_all(asar_path: PathBuf) -> asar::Result<()>
 }
 
 /// Spawn a process to kill OP.GG process
-fn kill_opgg()
-{
+fn kill_opgg() {
     use std::process::Command;
 
     let mut process: Command;
 
-    if std::env::consts::OS == "macos"
-    {
+    if std::env::consts::OS == "macos" {
         process = Command::new("killall");
         process.args(&["-9", "OP.GG"]);
-    }
-    else if std::env::consts::OS == "windows"
-    {
+    } else if std::env::consts::OS == "windows" {
         // const CREATE_NO_WINDOW = 0x08000000;
         process = Command::new("taskkill");
         process.args(&["/im", "OP.GG.exe", "/F"]);
-    }
-    else
-    {
+    } else {
         return;
     }
 
@@ -183,31 +173,25 @@ fn kill_opgg()
 /// ## Returns
 /// * Success - returns the canonicalize version of the path to OP.GG app directory
 /// * Failure - returns a String containing the error
-fn format_asar_path() -> Result<PathBuf, String>
-{
+fn format_asar_path() -> Result<PathBuf, String> {
     let path: PathBuf;
 
     println!("format_asar_path: determining platform.");
-    if std::env::consts::OS == "macos"
-    {
+    if std::env::consts::OS == "macos" {
         path = PathBuf::from("/Applications/OP.GG.app/Contents/Resources/app.asar");
-    }
-    else if std::env::consts::OS == "windows"
-    {
+    } else if std::env::consts::OS == "windows" {
         let appdata = match std::env::var("LOCALAPPDATA") {
             Ok(v) => v,
-            Err(e) => return Err(format!("format_asar_path: {e}"))
+            Err(e) => return Err(format!("format_asar_path: {e}")),
         };
         path = PathBuf::from(appdata).join("Programs/OP.GG/resources/app.asar");
-    }
-    else
-    {
+    } else {
         return Err("format_asar_path: Platform not compatible.".to_string());
     }
 
     match std::fs::canonicalize(path) {
         Ok(val) => return Ok(val),
-        Err(e) => return Err(format!("format_asar_path: {e}"))
+        Err(e) => return Err(format!("format_asar_path: {e}")),
     }
 }
 
@@ -216,23 +200,21 @@ fn format_asar_path() -> Result<PathBuf, String>
 /// ## Returns
 /// * Success - returns `true`
 /// * Failure - returns a String containing the error
-pub fn remove_ads() -> Result<bool, String>
-{
+pub fn remove_ads() -> Result<bool, String> {
     let path: PathBuf = match format_asar_path() {
         Ok(path) => path,
-        Err(e) => return Err(e)
+        Err(e) => return Err(e),
     };
 
-    if !path.exists()
-    {
+    if !path.exists() {
         return Err("remove_ads: OP.GG not found, make sure the app is installed.".to_string());
     }
 
     kill_opgg();
-    match scan_all(path)
-    {
-        Ok(_) => {},
-        Err(e) => return Err(format!("extract_all: {e}"))
+
+    match scan_all(path) {
+        Ok(_) => {}
+        Err(e) => return Err(format!("extract_all: {e}")),
     }
 
     Ok(true)
