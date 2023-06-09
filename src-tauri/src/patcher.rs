@@ -1,6 +1,13 @@
-use std::path::PathBuf;
+use std::{
+    path::PathBuf,
+    env::consts::OS
+};
 
-use asar::{AsarReader, AsarWriter};
+use asar::{
+    AsarReader,
+    AsarWriter,
+    reader::AsarFile
+};
 
 /// Remove ads from the file.
 ///
@@ -94,14 +101,23 @@ fn scan_all(asar_path: PathBuf) -> asar::Result<()> {
 
     println!("scan_all: scanning files from the archive.");
     for path in paths.keys() {
-        let path_str = path.to_str().unwrap();
-        let file = asar_r.files().get(path).unwrap();
+        let file: &AsarFile;
 
-        if path_str.eq(r"assets\main\main.js") {
-            println!("scan_all: removing ads of {}", path_str);
-            let patched = patch_file(String::from_utf8(file.data().to_vec()).unwrap());
+        file = match asar_r.files().get(path) {
+            Some(v) => v,
+            None => continue
+        };
+
+        if path.to_str().unwrap().eq(r"assets\main\main.js")
+        {
+            let patched: String;
+
+            println!("scan_all: removing ads of {:?}", path);
+            patched = patch_file(String::from_utf8(file.data().to_vec()).unwrap());
             asar_w.write_file(path.as_path(), patched.as_bytes(), false)?;
-        } else {
+        }
+        else
+        {
             asar_w.write_file(path.as_path(), file.data(), false)?;
         }
     }
@@ -131,13 +147,23 @@ fn scan_all(asar_path: PathBuf) -> asar::Result<()> {
 
     println!("scan_all: scanning files of the archive.");
     for path in files.keys() {
-        let file = asar_r.files().get(path).unwrap();
+        let file: &AsarFile;
 
-        if path.starts_with("assets/react") && path.ends_with(".js") {
+        file = match asar_r.files().get(path) {
+            Some(v) => v,
+            None => continue
+        };
+
+        if path.starts_with("assets/react") && path.ends_with(".js")
+        {
+            let patched: String;
+
             println!("patch_file: removing ads from {}", path.to_str().unwrap());
-            let patched = patch_file(String::from_utf8(file.data().to_vec()).unwrap());
+            patched = patch_file(String::from_utf8(file.data().to_vec()).unwrap());
             asar_w.write_file(path.as_path(), patched.as_bytes(), false)?;
-        } else {
+        }
+        else
+        {
             asar_w.write_file(path.as_path(), file.data(), false)?;
         }
     }
@@ -153,14 +179,19 @@ fn kill_opgg() {
 
     let mut process: Command;
 
-    if std::env::consts::OS == "macos" {
+    if OS == "macos"
+    {
         process = Command::new("killall");
         process.args(&["-9", "OP.GG"]);
-    } else if std::env::consts::OS == "windows" {
+    }
+    else if OS == "windows"
+    {
         // const CREATE_NO_WINDOW = 0x08000000;
         process = Command::new("taskkill");
         process.args(&["/im", "OP.GG.exe", "/F"]);
-    } else {
+    }
+    else
+    {
         return;
     }
 
@@ -177,15 +208,20 @@ fn format_asar_path() -> Result<PathBuf, String> {
     let path: PathBuf;
 
     println!("format_asar_path: determining platform.");
-    if std::env::consts::OS == "macos" {
+    if OS == "macos" {
         path = PathBuf::from("/Applications/OP.GG.app/Contents/Resources/app.asar");
-    } else if std::env::consts::OS == "windows" {
-        let appdata = match std::env::var("LOCALAPPDATA") {
+    }
+    else if OS == "windows" {
+        let appdata: String;
+
+        appdata = match std::env::var("LOCALAPPDATA") {
             Ok(v) => v,
             Err(e) => return Err(format!("format_asar_path: {e}")),
         };
+
         path = PathBuf::from(appdata).join("Programs/OP.GG/resources/app.asar");
-    } else {
+    }
+    else {
         return Err("format_asar_path: Platform not compatible.".to_string());
     }
 
@@ -201,7 +237,9 @@ fn format_asar_path() -> Result<PathBuf, String> {
 /// * Success - returns `true`
 /// * Failure - returns a String containing the error
 pub fn remove_ads() -> Result<bool, String> {
-    let path: PathBuf = match format_asar_path() {
+    let path: PathBuf;
+
+    path = match format_asar_path() {
         Ok(path) => path,
         Err(e) => return Err(e),
     };
