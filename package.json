@@ -1,7 +1,7 @@
 {
   "name": "opgg-patcher",
-  "version": "2.1.1",
-  "description": "",
+  "version": "2.1.2",
+  "description": "Tool to Remove Ads from OP-GG Desktop Client",
   "scripts": {
     "start": "vite",
     "dev": "vite",
@@ -11,7 +11,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@tauri-apps/cli": "^1.1.0",
+    "@tauri-apps/cli": "^1.3.1",
     "vite": "^3.0.0",
     "vite-plugin-solid": "^2.3.0"
   },
