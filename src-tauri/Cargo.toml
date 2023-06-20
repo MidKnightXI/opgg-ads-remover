@@ -1,6 +1,6 @@
 [package]
 name = "opgg-patcher"
-version = "2.1.2"
+version = "2.2.0"
 description = "Tool to Remove Ads from OP-GG Desktop Client"
 authors = ["MidKnightXI"]
 license = ""
