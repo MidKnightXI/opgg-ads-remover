@@ -8,11 +8,11 @@
   },
   "package": {
     "productName": "OPGG Patcher",
-    "version": "2.1.2"
+    "version": "2.2.0"
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "all": false
     },
     "bundle": {
       "active": true,
