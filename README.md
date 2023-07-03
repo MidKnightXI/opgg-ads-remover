@@ -1,6 +1,6 @@
 # OPGG Patcher
 
-Patcher removing ads from the desktop application [OP.GG](https://op.gg/desktop/?utm_source=opgg&utm_medium=button&utm_campaign=global).
+Application that Removes Ads from [OP.GG](https://op.gg/desktop/?utm_source=opgg&utm_medium=button&utm_campaign=global).
 
 # Installation
 
