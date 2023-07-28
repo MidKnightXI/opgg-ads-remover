@@ -24,21 +24,21 @@ use asar::{
 #[cfg(target_os = "windows")]
 fn patch_file(file: String) -> String {
     const GIST: &str = "https://gist.githubusercontent.com";
-    const CLOUDFLARE: &str = "https://worker-rust.midknight-dev.workers.dev/";
+    const CLOUDFLARE: &str = "https://worker-rust.midknight-dev.workers.dev";
 
     let patched_file: String = file
-        // .replace(
-        //     r#"checkIfChromeDirectoryExists("Default")"#,
-        //     r#"checkIfChromeDirectoryExists("NoChrome:((((??")"#,
-        // )
-        // .replace(
-        //     r#"AppData\Local\Google\Chrome\User Data"#,
-        //     r#"AppData\Local\Google\Carbon\Privacy?"#,
-        // )
-        // .replace("https://desktop.op.gg/api/tracking/ow", GIST)
-        // .replace("https://geo-internal.op.gg/api/current-ip", GIST)
-        .replace("app.labs.sydney", "worker-rust.midknight-dev.workers.dev")
-        .replace("https://opgg-desktop-data.akamaized.net", CLOUDFLARE);
+    .replace("app.labs.sydney", "worker-rust.midknight-dev.workers.dev")
+    .replace("https://opgg-desktop-data.akamaized.net", CLOUDFLARE);
+    // .replace(
+    //     r#"checkIfChromeDirectoryExists("Default")"#,
+    //     r#"checkIfChromeDirectoryExists("NoChrome:((((??")"#,
+    // )
+    // .replace(
+    //     r#"AppData\Local\Google\Chrome\User Data"#,
+    //     r#"AppData\Local\Google\Carbon\Privacy?"#,
+    // )
+    // .replace("https://desktop.op.gg/api/tracking/ow", GIST)
+    // .replace("https://geo-internal.op.gg/api/current-ip", GIST)
 
     return patched_file;
 }
