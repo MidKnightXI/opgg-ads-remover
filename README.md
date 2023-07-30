@@ -13,24 +13,6 @@ Application that Removes Ads from [OP.GG](https://op.gg/desktop/?utm_source=opgg
 * Open the directory in a shell terminal and run: `yarn && yarn tauri build`
 * Double click on the executable
 
-# Contribute
-
-If you want to contribute to the project just fork the project and open a pull request describing the problem that you're solving.
-
-Here are some basic steps you need to follow to contribute to the project:
-- Download [OP.GG](https://op.gg/desktop/?utm_source=opgg&utm_medium=button&utm_campaign=global)
-- Open where it's located `C:\Users\$USER\AppData\Local\Programs\OP.GG\ressources`
-- Copy `app.asar` and `app.asar.unpacked` to the location you want
-- Install the [asar tool](https://github.com/electron/asar) from electron team with npm in the folder you put the asar archive
-- Open `package.json` and add:
-```json
-"script": {
-    "asar": "asar e app.asar archive"
-}
-```
-- Run `npm run asar` and go to `archive\assets\main\main.js`
-- Work on it ✨
-
 # Contributing
 
 <!-- Do not remove or modify this section -->
