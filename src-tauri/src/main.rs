@@ -8,8 +8,8 @@ mod patcher;
 #[tauri::command]
 fn patch() -> String {
     match patcher::remove_ads() {
-        Ok(_v) => return "Patched Successfully".to_string(),
-        Err(e) => return e,
+        Ok(_v) => "Patched Successfully".to_string(),
+        Err(e) => e,
     }
 }
 
