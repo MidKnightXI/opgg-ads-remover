@@ -1,6 +1,6 @@
 {
   "name": "opgg-patcher",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Tool to Remove Ads from OP-GG Desktop Client",
   "scripts": {
     "start": "vite",
