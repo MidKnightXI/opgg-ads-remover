@@ -9,9 +9,10 @@ Application that Removes Ads from [OP.GG](https://op.gg/desktop/?utm_source=opgg
 
 # Build it yourself
 
-* Clone the repository: `git clone https://github.com/MidKnightXI/opgg-ads-remover.git`
-* Open the directory in a shell terminal and run: `yarn && yarn tauri build`
-* Double click on the executable
+* Install [Rust Toolchain](https://www.rust-lang.org/tools/install), [Yarn](https://yarnpkg.com/getting-started/install) and [NodeJS](https://nodejs.org/en/download/current).
+* Clone the repository: `git clone https://github.com/MidKnightXI/opgg-ads-remover.git`.
+* Open the directory in a shell terminal and run: `yarn && yarn tauri build`.
+* Double *click* on the binary in your file manager.
 
 # Contributing
 
